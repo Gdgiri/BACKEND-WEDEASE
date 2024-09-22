@@ -13,6 +13,6 @@ const router = express.Router();
 router.post("/register", Register);
 router.post("/login", Login);
 router.post("/forgot", Forgot);
-router.post("/reset", Reset);
+router.post("/reset/:token", Reset);
 
 export default router;
