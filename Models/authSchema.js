@@ -6,15 +6,10 @@ const authSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
-    role: {
-      type: String,
-      enum: ["user", "vendor"],
-      required: true,
-      default: "user",
-    },
-    imgUrl: {
-      type: String,
-      required: true,
+
+    isUser: {
+      type: Boolean,
+      default: true,
     },
     username: {
       type: String,
@@ -27,34 +22,6 @@ const authSchema = new mongoose.Schema(
       unique: true,
     },
     password: {
-      type: String,
-      required: true,
-    },
-
-    phone: {
-      type: String,
-      required: true,
-      validate: {
-        validator: function (v) {
-          // Regex for validating phone number formats
-          return /^\+?(\d[\d-]{7,15})$/.test(v);
-        },
-        message: (props) => `${props.value} is not a valid phone number!`,
-      },
-    },
-    age: {
-      type: Number,
-      min: 0,
-      max: 120,
-      required: true,
-    },
-    gender: {
-      type: String,
-      enum: ["male", "female", "other"],
-      required: true,
-    },
-
-    city: {
       type: String,
       required: true,
     },

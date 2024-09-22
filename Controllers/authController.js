@@ -1,104 +1,97 @@
 import Auth from "../Models/authSchema.js";
 import bcryptjs from "bcryptjs";
 import jwt from "jsonwebtoken";
-//import crypto from "crypto";
-import { validationResult } from "express-validator";
 
-//Register a new user
+// Register
 
-export const register = async (req, res) => {
-  const {
-    isAdmin,
-    role,
-    imgUrl,
-    username,
-    email,
-    password,
-    phone,
-    age,
-    gender,
-    city,
-  } = req.body;
+export const Register = async (req, res) => {
+  const { username, email, password } = req.body;
 
-  // validation errors
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
+  if (
+    !username ||
+    !email ||
+    !password ||
+    username === "" ||
+    email === "" ||
+    password === ""
+  ) {
+    return res.status(400).json({ message: "All the fields are required" });
   }
 
   try {
-    const existingUser = await Auth.findOne({ $or: [{ username }, { email }] });
-    if (existingUser) {
+    const userExist = await Auth.findOne({ $or: [{ email }, { username }] });
+
+    if (userExist) {
       return res
         .status(400)
-        .json({ error: "Username or email already exists" });
+        .json({ message: "username or email already exist" });
     }
 
-    // Hash the password
-    const salt = await bcryptjs.genSalt(10);
-    const hashedPassword = await bcryptjs.hash(password, salt);
+    const hashedPassword = await bcryptjs.hashSync(password, 10);
 
-    // Create a new user
-    const newUser = new Auth({
-      isAdmin: false,
-      role: role || "user",
-      imgUrl,
-      username,
-      email,
-      password: hashedPassword,
-      phone,
-      age,
-      gender,
-      city,
-    });
+    const newUser = new Auth({ username, email, password: hashedPassword });
 
-    // Save the new user to the database
     await newUser.save();
 
-    res
-      .status(201)
-      .json({ message: "User registered successfully!", result: newUser });
+    return res
+      .status(200)
+      .json({ message: "user registered successfully", result: newUser });
   } catch (error) {
     console.log(error);
-    res.status(500).json({ message: "Register Failed Interna; Server Error" });
+    res.status(500).json({
+      message: "Register failed due to internal server error",
+      error: error.message,
+    });
   }
 };
 
-// login user
+// Login
 
-export const login = async (req, res) => {
+export const Login = async (req, res) => {
   const { email, password } = req.body;
+
+  if (!email || !password || email === "" || password === "") {
+    return res.status(400).json({ message: "All the fields are required" });
+  }
 
   try {
     const user = await Auth.findOne({ email });
+
     if (!user) {
-      return res.status(400).json({ message: "User not found" });
+      return res.status(400).json({ message: "Invalid email or password" });
     }
 
-    const isMatch = await bcryptjs.compare(password, user.password);
+    const isMatch = await bcryptjs.compareSync(password, user.password);
+    console.log("password match result:", isMatch);
+
     if (!isMatch) {
-      return res.status(401).json({ message: "Invalid credentials" }); // Changed to 401
+      return res.status(400).json({ message: "Invalid email or password" });
     }
 
     const token = jwt.sign(
-      { id: user._id, username: user.username, role: user.role },
+      {
+        id: user._id,
+        username: user.username,
+      },
       process.env.JWT_SECRET,
       { expiresIn: "1h" }
     );
 
     res.status(200).json({
-      // Added status code
-      message: "Login successfully",
       token,
       user: {
         id: user._id,
         username: user.username,
         email: user.email,
-        role: user.role,
+        isAdmin: user.isAdmin,
+        isUser: user.isUser,
       },
     });
   } catch (error) {
     console.log(error);
-    res.status(500).json({ message: "Login Failed Internal Server Error" });
+    res.status(500).json({
+      message: "login failed due to internal server error",
+      error: error.message,
+    });
   }
 };
