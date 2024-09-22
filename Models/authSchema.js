@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import bcrypt from "bcryptjs";
 
 const authSchema = new mongoose.Schema(
   {
@@ -25,6 +26,8 @@ const authSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    resetPasswordToken: String,
+    resetPasswordExpire: Date,
   },
   { timestamps: true }
 );
