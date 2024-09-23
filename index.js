@@ -3,7 +3,6 @@ import cors from "cors";
 import dotenv from "dotenv";
 import { MongoDB } from "./Database/config.js";
 import router from "./Routes/authRouters.js";
-import profileRouter from "./Routes/profileRouters.js";
 
 dotenv.config();
 
@@ -47,7 +46,6 @@ app.get("/", (req, res) => {
 //API Routes
 
 app.use("/api/auth", router);
-app.use("/api/profile", profileRouter);
 
 // Listen
 app.listen(port, () => {
