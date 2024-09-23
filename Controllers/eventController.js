@@ -17,3 +17,19 @@ export const eventCreate = async (req, res) => {
     });
   }
 };
+
+// getAll
+
+export const fetchEvent = async (req, res) => {
+  try {
+    const getEvent = await Event.find();
+    res
+      .status(200)
+      .json({ message: "events fetch successfully", result: getEvent });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "event data fetch failure due to an internal server error",
+    });
+  }
+};
