@@ -194,3 +194,17 @@ export const Reset = async (req, res) => {
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };
+
+// admin user data
+
+export const Admin = async (req, res) => {
+  try {
+    const getData = await Auth.find({ isUser: true });
+    res
+      .status(200)
+      .json({ message: "All Data Fetch Successfully", result: getData });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "User Data Fetched Successfully" });
+  }
+};
