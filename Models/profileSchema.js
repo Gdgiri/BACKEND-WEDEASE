@@ -20,9 +20,10 @@ const profileSchema = new mongoose.Schema(
     },
     gender: {
       type: String,
-      enum: ["male", "Female", "Others"],
+      enum: ["Male", "Female", "Other"], // Fix casing and spelling to match your form
       required: true,
     },
+
     imgUrl: {
       type: String,
       required: true,

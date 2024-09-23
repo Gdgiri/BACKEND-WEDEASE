@@ -5,6 +5,8 @@ import Profile from "../Models/profileSchema.js";
 export const createProfile = async (req, res) => {
   try {
     const newProfile = new Profile(req.body);
+    console.log(newProfile);
+
     await newProfile.save();
     res
       .status(200)
