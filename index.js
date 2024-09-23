@@ -3,6 +3,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import { MongoDB } from "./Database/config.js";
 import router from "./Routes/authRouters.js";
+import profileRouter from "./Routes/profileRouters.js";
 
 dotenv.config();
 
@@ -13,7 +14,7 @@ app.use(express.json());
 app.use(
   cors({
     origin: "http://localhost:3000",
-    methods: ["GET", "POST","PUT","DELETE"],
+    methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
 );
@@ -46,6 +47,7 @@ app.get("/", (req, res) => {
 //API Routes
 
 app.use("/api/auth", router);
+app.use("/api/profile", profileRouter);
 
 // Listen
 app.listen(port, () => {
