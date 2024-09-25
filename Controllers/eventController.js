@@ -56,7 +56,7 @@ export const fetchId = async (req, res) => {
 export const updateEvent = async (req, res) => {
   try {
     const id = req.params.id;
-    console.log(id);
+    //console.log(id);
 
     const modifyEvent = await Event.findByIdAndUpdate(
       id,
@@ -100,7 +100,7 @@ export const updateEvent = async (req, res) => {
 export const deleteEvent = async (req, res) => {
   try {
     const id = req.params.id;
-    console.log(id);
+    //console.log(id);
 
     const removeEvent = await Event.findByIdAndDelete(id);
 
