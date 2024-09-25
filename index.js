@@ -48,6 +48,7 @@ app.get("/", (req, res) => {
 app.use("/api/auth", router);
 app.use("/api/event", eventRouter);
 
+
 // Listen
 app.listen(port, () => {
   console.log(`Server is running`);

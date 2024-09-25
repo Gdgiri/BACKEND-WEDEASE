@@ -1,4 +1,5 @@
 import Event from "../Models/eventSchema.js";
+import Photographer from "../Models/photographerSchema.js";
 
 // create
 
@@ -114,6 +115,45 @@ export const deleteEvent = async (req, res) => {
     console.log(error);
     res.status(500).json({
       message: "event data failed to delete due to internal server error",
+    });
+  }
+};
+
+// photography
+
+// create
+
+export const createPhotographer = async (req, res) => {
+  try {
+    const photographer = new Photographer(req.body);
+    await photographer.save();
+    res.status(200).json({
+      message: "Photographer created successfully",
+      result: photographer,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "photographer created failed due to internal server error",
+    });
+  }
+};
+
+// get
+
+export const getAllPhotographers = async (req, res) => {
+  try {
+    const photographers = await Photographer.find();
+    res
+      .status(200)
+      .json({
+        message: "photographers fetched successfully",
+        result: photographers,
+      });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "photographers failed to fetch due to internal server error",
     });
   }
 };
