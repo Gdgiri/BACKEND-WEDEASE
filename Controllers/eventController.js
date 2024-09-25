@@ -34,6 +34,23 @@ export const fetchEvent = async (req, res) => {
   }
 };
 
+// getbyid
+
+export const fetchId = async (req, res) => {
+  try {
+    const event = await Event.findById(req.params.id);
+    if (!event) {
+      return res.status(404).json({ message: "Event not found" });
+    }
+    res.status(200).json({ message: "Event fetched ", result: event });
+  } catch (error) {
+    console.log(error);
+    res
+      .status(500)
+      .json({ messaeg: "fetch data is failed due to internal server error" });
+  }
+};
+
 // update
 
 export const updateEvent = async (req, res) => {
